@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12233F">
+<meta name="color-scheme" content="light">
+<title>두산 vs NC 단관 · 304블럭 좌석표</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --bg:#EEF1F7;
+    --surface:#FFFFFF;
+    --line:#D7DEEB;
+    --navy:#12233F;
+    --navy-2:#1D3560;
+    --text:#16203A;
+    --muted:#66768F;
+    --red:#CE0E2D;
+    --kid:#8FE0D6;
+    --kid-deep:#0B6E63;
+    --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{background:var(--bg);-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:var(--font);font-feature-settings:"tnum" 1;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 calc(40px + env(safe-area-inset-bottom));
+    font-size:16px;line-height:1.5;
+  }
+  .wrap{max-width:1140px;margin:0 auto;padding:0 16px}
+
+  /* hero : 항상 자기 배경을 갖는 네이비 카드 */
+  .hero{
+    background:var(--navy);color:#fff;
+    margin:0 0 18px;padding:26px 0 22px;
+    border-radius:0 0 20px 20px;
+  }
+  .kicker{margin:0 0 8px;font-size:clamp(14px,3.6vw,19px);font-weight:700;color:#FFC53D}
+  .kicker span{color:#93A5C4;font-weight:600;margin:0 4px}
+  h1{font-size:clamp(27px,7.5vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:0;color:#fff}
+  .meta{display:grid;gap:11px;margin:18px 0 0;padding:16px 0 0;border-top:1px solid rgba(255,255,255,.18)}
+  .meta div{display:flex;gap:12px;align-items:baseline}
+  .meta dt{flex:0 0 40px;color:#93A5C4;font-size:13px;font-weight:600}
+  .meta dd{margin:0;font-size:15.5px;font-weight:700;color:#fff}
+  .meta dd em{display:block;font-style:normal;font-size:13px;font-weight:500;color:#FFC53D;margin-top:3px}
+  .tally{display:flex;gap:24px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.18)}
+  .tally b{display:block;font-size:23px;font-weight:800;line-height:1;color:#fff}
+  .tally small{color:#93A5C4;font-size:12px}
+
+  .controls{display:flex;gap:8px;margin:0 0 14px}
+  .controls input{
+    flex:1;padding:13px 14px;border-radius:11px;border:1px solid var(--line);
+    background:var(--surface);color:var(--text);font:inherit;font-size:16px;min-width:0;
+  }
+  .controls input::placeholder{color:#98A5BC}
+  .controls input:focus{outline:2px solid var(--navy-2);outline-offset:1px}
+  .btn{
+    padding:13px 16px;border-radius:11px;border:1px solid var(--line);
+    background:var(--surface);color:var(--text);font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  }
+  .btn:focus-visible{outline:2px solid var(--navy-2);outline-offset:2px}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+
+  .field{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+  .ground{padding:11px;text-align:center;font-weight:700;font-size:13.5px;letter-spacing:.06em;
+    color:#0E2410;background:linear-gradient(180deg,#5FBE3F,#3E9A26)}
+  .swipe{display:none;margin:0;padding:11px 14px 0;color:var(--muted);font-size:12.5px}
+  .scroller{overflow-x:auto;padding:14px;-webkit-overflow-scrolling:touch}
+  .grid{display:grid;gap:6px;min-width:940px}
+  .rowline{display:grid;grid-template-columns:46px repeat(13,1fr);gap:6px}
+  .rowlabel{
+    position:sticky;left:0;z-index:2;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:13px;color:var(--navy);
+    border:1px solid var(--line);border-radius:9px;background:var(--surface);
+  }
+  .seat{
+    position:relative;border:1px solid rgba(18,35,63,.14);padding:8px 3px;border-radius:9px;
+    color:var(--text);font:inherit;text-align:center;cursor:pointer;
+    display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;
+    min-height:58px;transition:box-shadow .12s ease;
+  }
+  .seat .no{font-size:16px;font-weight:800;line-height:1}
+  .seat .team{font-size:11.5px;font-weight:600;line-height:1.15;word-break:keep-all}
+  .seat.empty{background:#F2F4F9;color:#9AA6BC;border:1px dashed #C3CCDD}
+  .seat:focus-visible{outline:3px solid var(--navy-2);outline-offset:2px}
+  .seat[aria-pressed="true"],.seat.hit{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--red)}
+  .seat.dim{opacity:.3}
+  .seat.kid{border-color:var(--kid-deep);border-width:2px}
+  .seat .badge{
+    position:absolute;top:4px;right:5px;width:17px;height:17px;border-radius:50%;
+    background:var(--kid-deep);color:#fff;font-size:10.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;line-height:1;
+  }
+
+  .below{display:grid;gap:12px;margin-top:12px}
+  .card{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:15px 16px}
+  .card h2{margin:0 0 11px;font-size:14.5px;font-weight:700;color:var(--muted)}
+  #detail .big{font-size:20px;font-weight:800;margin:0;color:var(--navy)}
+  #detail dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:12px 0 0;font-size:14.5px}
+  #detail dt{color:var(--muted)}
+  #detail dd{margin:0;font-weight:600}
+  #detail .note{margin:12px 0 0;padding:9px 12px;border-radius:9px;background:#E4F7F4;color:var(--kid-deep);font-size:13.5px;font-weight:600}
+  #detail .none{color:var(--muted);font-size:14px;margin:0;line-height:1.6}
+  .legend{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;
+    border:1px solid var(--line);background:var(--surface);color:var(--text);font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+  .chip i{width:10px;height:10px;border-radius:3px;display:block;border:1px solid rgba(18,35,63,.14)}
+  .chip em{font-style:normal;color:var(--muted);font-weight:500}
+  .chip.on{border-color:var(--red);background:#FDECEF;color:var(--red)}
+  .chip:focus-visible{outline:2px solid var(--navy-2);outline-offset:2px}
+
+  .rsvp{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:20px 16px;margin-top:12px}
+  .rsvp h2{margin:0 0 6px;font-size:17px;font-weight:800;color:var(--navy)}
+  .rsvp .sub{margin:0 0 16px;color:var(--muted);font-size:13.5px;line-height:1.6}
+  .rsvp .sub.small{margin:12px 0 0;font-size:12.5px;text-align:center}
+  .rsvp .url{color:var(--navy-2);word-break:break-all}
+  .formlink{display:block;width:100%;text-align:center;text-decoration:none;padding:16px;font-size:16px;font-weight:700}
+  .formlink:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+  .notes{margin-top:12px;border:1px solid #EBD8A8;background:#FFF8E6;border-radius:14px;padding:15px 16px}
+  .notes h2{color:#8A6100;margin:0 0 8px;font-size:14px}
+  .notes ul{margin:0;padding-left:17px;color:#5C4A1E;font-size:13.5px;line-height:1.8}
+  footer{margin-top:20px;color:var(--muted);font-size:12.5px;line-height:1.7}
+
+  @media (min-width:780px){
+    .wrap{padding:0 24px}
+    .hero{margin:0 0 22px;padding:34px 0 26px}
+    .meta{display:flex;flex-wrap:wrap;gap:12px 44px}
+    .meta div{flex-direction:column;gap:4px}
+    .meta dt{flex:none}
+    .below{grid-template-columns:1.1fr .9fr}
+    .grid{min-width:1000px}
+    .seat{min-height:64px}
+  }
+  @media (max-width:779px){
+    .swipe{display:block}
+    .grid{min-width:820px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+
+  <header>
+    <p class="kicker">두산 베어스 <span>vs</span> NC 다이노스 단체관람</p>
+    <h1>304블럭 좌석표</h1>
+    <dl class="meta">
+      <div><dt>일시</dt><dd>9월 12일 토요일 17:00</dd></div>
+      <div><dt>장소</dt><dd>잠실야구장 네이비석 304블럭</dd></div>
+      <div><dt>배부</dt><dd>15:30 ~ 16:30<em>종합운동장역 8번 출구 바로 앞</em></dd></div>
+      <div><dt>뒷풀이</dt><dd>경기 종료 후 바로</dd></div>
+    </dl>
+    <div class="tally">
+      <div><b id="t-seat">50</b><small>배정 좌석</small></div>
+      <div><b id="t-empty">0</b><small>빈자리</small></div>
+      <div><b id="t-kid">9</b><small>두린이</small></div>
+    </div>
+  </header>
+  </div></div>
+
+  <div class="wrap">
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="팀 이름이나 좌석번호 검색" autocomplete="off" enterkeyhint="search">
+    <button class="btn" id="reset">전체</button>
+  </div>
+
+  <div class="field">
+    <div class="ground">그라운드 방향</div>
+    <p class="swipe">좌우로 밀어서 전체 좌석을 볼 수 있습니다</p>
+    <div class="scroller"><div class="grid" id="grid"></div></div>
+  </div>
+
+  <div class="below">
+    <div class="card" id="detail">
+      <h2>좌석 정보</h2>
+      <p class="none">좌석을 누르면 어느 팀 자리인지, 몇 명인지 보여줍니다.</p>
+    </div>
+    <div class="card">
+      <h2>팀별 좌석</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <section class="rsvp">
+    <h2>뒷풀이 참석 조사</h2>
+    <p class="sub">경기 종료 후 바로 진행합니다. 당근 모임 글에서 참석 여부를 남겨 주세요.</p>
+    <a class="btn primary formlink" href="https://www.daangn.com/kr/group-posts/PnzMxRWP" target="_blank" rel="noopener">당근 모임 글 열기</a>
+    <p class="sub small">버튼이 안 열리면 이 주소를 복사해 주세요<br><span class="url">https://www.daangn.com/kr/group-posts/PnzMxRWP</span></p>
+  </section>
+
+  <div class="notes">
+    <h2>안내</h2>
+    <ul>
+      <li><b>표 배부는 15:30~16:30, 종합운동장역 8번 출구 바로 앞입니다.</b> 15:30 이전에는 배부하지 않으니 천천히 와 주세요.</li>
+      <li>배부할 때 "몇 열이세요?" 여쭤봅니다. 미리 본인 좌석을 확인하고 오시면 금방 받아 가실 수 있어요.</li>
+      <li>두린이 친구들에게는 표 드릴 때 선물도 함께 드립니다. 두린이 동반하신 분은 배부할 때 말씀해 주세요.</li>
+      <li>두린이 9명은 시야 확보를 위해 통로쪽 자리에 배치했습니다. 옆자리는 보호자가 앉아 주세요.</li>
+      <li>두린이에게는 경기 중 별도 이벤트와 굿즈를 준비합니다.</li>
+      <li>50석 전부 찼습니다. 빈자리 없습니다.</li>
+      <li>6회말에는 성인 대상 룰렛 이벤트가 있습니다. 당첨되신 분께 보스턴가방을 드려요.</li>
+      <li>공릉동 10번타자님은 탈모가 아니십니다.</li>
+    </ul>
+  </div>
+
+  <footer>
+    다 같이 두산 응원합니다. 유니폼·응원도구 챙겨 오세요.<br>
+    민트 테두리에 ‘두’ 표시가 있는 자리가 두린이석입니다.
+  </footer>
+
+</div>
+
+<script>
+const TEAMS = {
+  "해피서균":  {people:3, color:"#F2B32E"},
+  "두두두산":  {people:1, color:"#F6D02F"},
+  "병쪽이":    {people:1, color:"#F6D02F"},
+  "박상덕":    {people:1, color:"#F6D02F"},
+  "바니바니바":{people:1, color:"#F6E27A"},
+  "MJ":        {people:1, color:"#F6E27A"},
+  "V7원해요":  {people:2, color:"#F2B32E"},
+  "곰팀":      {people:5, color:"#9CCB7A"},
+  "병아리":    {people:6, color:"#9CCB7A"},
+  "10번타자":  {people:0, color:"#A9D2ED", note:"진행자석입니다"},
+  "이대두산":  {people:5, color:"#9EC9E8"},
+  "룰룰":      {people:2, color:"#C9CDD4"},
+  "도리도링":  {people:1, color:"#F2B32E"},
+  "민코":      {people:1, color:"#F2B32E"},
+  "봄길":      {people:1, color:"#F2B32E"},
+  "미니시온맘":{people:1, color:"#F6D02F"},
+  "고블린":    {people:1, color:"#F2B32E"},
+  "포도봉봉":  {people:1, color:"#F6D02F"},
+  "여명이":    {people:1, color:"#C5E1A5"},
+  "줄리아":    {people:2, color:"#C5E1A5"},
+  "hyunme":    {people:3, color:"#C5E1A5"},
+  "카레":      {people:1, color:"#B7DDA0"},
+  "허슬두링":  {people:4, color:"#B7DDA0"},
+  "하얀미르":  {people:4, color:"#C9CDD4"},
+};
+
+const KID_SEATS = [1, 23, 24, 25, 26, 44, 45, 49, 50];
+
+const ROWS = [
+  ["1열",[[1,"해피서균"],[2,"해피서균"],[3,"해피서균"],[4,"두두두산"],[5,"병쪽이"],[6,"박상덕"],
+          [7,"포도봉봉"],[8,"여명이"],[9,"바니바니바"],[10,"MJ"],[11,"V7원해요"],[12,"V7원해요"],null]],
+  ["2열",[[24,"병아리"],[23,"병아리"],[22,"병아리"],[21,"병아리"],[20,"병아리"],[19,"병아리"],
+          [18,"10번타자"],[17,"곰팀"],[16,"곰팀"],[15,"곰팀"],[14,"곰팀"],[13,"곰팀"],null]],
+  ["3열",[[25,"이대두산"],[26,"이대두산"],[27,"이대두산"],[28,"이대두산"],[29,"이대두산"],
+          [30,"도리도링"],[31,"민코"],[32,"고블린"],[33,"줄리아"],[34,"줄리아"],[35,"룰룰"],[36,"룰룰"],[37,"카레"]]],
+  ["4열",[[50,"하얀미르"],[49,"하얀미르"],[48,"하얀미르"],[47,"하얀미르"],[46,"hyunme"],[45,"hyunme"],[44,"hyunme"],[43,"봄길"],
+          [42,"허슬두링"],[41,"허슬두링"],[40,"허슬두링"],[39,"허슬두링"],[38,"미니시온맘"]]]
+];
+
+const grid = document.getElementById('grid');
+const seatEls = [];
+
+ROWS.forEach(function(entry){
+  var label = entry[0], seats = entry[1];
+  var line = document.createElement('div');
+  line.className = 'rowline';
+  var lab = document.createElement('div');
+  lab.className = 'rowlabel';
+  lab.textContent = label;
+  line.appendChild(lab);
+
+  seats.forEach(function(s){
+    if (!s) { line.appendChild(document.createElement('div')); return; }
+    var no = s[0], team = s[1];
+    var isKid = KID_SEATS.indexOf(no) !== -1;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'seat' + (team ? '' : ' empty') + (isKid ? ' kid' : '');
+    b.setAttribute('aria-pressed','false');
+    b.dataset.no = no;
+    b.dataset.team = team || '';
+    if (team) b.style.background = isKid ? '#B7EDE6' : TEAMS[team].color;
+    b.innerHTML =
+      (isKid ? '<span class="badge" aria-hidden="true">두</span>' : '') +
+      '<span class="no">' + no + '</span>' +
+      '<span class="team">' + (team || '빈자리') + '</span>';
+    b.setAttribute('aria-label', no + '번 ' + (team || '빈자리') + (isKid ? ' 두린이석' : ''));
+    line.appendChild(b);
+    seatEls.push(b);
+  });
+  grid.appendChild(line);
+});
+
+const detail = document.getElementById('detail');
+
+function showDetail(el){
+  var no = el.dataset.no, team = el.dataset.team;
+  if (!team){
+    detail.innerHTML = '<h2>좌석 정보</h2><p class="big">' + no + '번 · 빈자리</p>' +
+      '<p class="none">아직 비어 있는 자리입니다. 추가 신청이 들어오면 순서대로 채웁니다.</p>';
+    return;
+  }
+  var t = TEAMS[team];
+  var mine = seatEls.filter(function(s){ return s.dataset.team === team; });
+  var kidSeats = mine.filter(function(s){ return s.classList.contains('kid'); })
+                     .map(function(s){ return s.dataset.no; });
+  detail.innerHTML =
+    '<h2>좌석 정보</h2>' +
+    '<p class="big">' + no + '번 · ' + team + (el.classList.contains('kid') ? ' · 두린이석' : '') + '</p>' +
+    '<dl>' +
+      '<dt>인원</dt><dd>' + (t.people ? t.people + '명' : '해당 없음') + '</dd>' +
+      '<dt>좌석</dt><dd>' + mine.map(function(s){ return +s.dataset.no; }).sort(function(a,b){ return a-b; }).join(', ') + '번 (' + mine.length + '석)</dd>' +
+      '<dt>두린이</dt><dd>' + (kidSeats.length ? kidSeats.length + '명 (' + kidSeats.join(', ') + '번)' : '없음') + '</dd>' +
+    '</dl>' +
+    (t.note ? '<p class="note">' + t.note + '</p>' : '');
+}
+
+seatEls.forEach(function(el){
+  el.addEventListener('click', function(){
+    seatEls.forEach(function(s){ s.setAttribute('aria-pressed','false'); });
+    el.setAttribute('aria-pressed','true');
+    showDetail(el);
+  });
+});
+
+// 검색
+const q = document.getElementById('q');
+function filter(term){
+  term = String(term).trim().toLowerCase();
+  if (!term){
+    seatEls.forEach(function(s){ s.classList.remove('dim','hit'); });
+    return;
+  }
+  seatEls.forEach(function(s){
+    var hit = (s.dataset.no + ' ' + s.dataset.team).toLowerCase().indexOf(term) !== -1;
+    s.classList.toggle('hit', hit);
+    s.classList.toggle('dim', !hit);
+  });
+}
+q.addEventListener('input', function(e){ filter(e.target.value); clearChips(); });
+
+// 팀 범례
+const legend = document.getElementById('legend');
+function clearChips(){
+  Array.prototype.forEach.call(legend.querySelectorAll('.chip'), function(c){ c.classList.remove('on'); });
+}
+Object.keys(TEAMS).forEach(function(team){
+  var mine = seatEls.filter(function(s){ return s.dataset.team === team; });
+  if (!mine.length) return;
+  var kids = mine.filter(function(s){ return s.classList.contains('kid'); }).length;
+  var c = document.createElement('button');
+  c.type = 'button'; c.className = 'chip';
+  c.innerHTML = '<i style="background:' + TEAMS[team].color + '"></i>' + team +
+    ' <em>' + mine.length + '석' + (kids ? ' · 두린이 ' + kids : '') + '</em>';
+  c.addEventListener('click', function(){
+    var on = c.classList.contains('on');
+    clearChips(); q.value = '';
+    if (on){ filter(''); return; }
+    c.classList.add('on'); filter(team);
+  });
+  legend.appendChild(c);
+});
+
+document.getElementById('reset').addEventListener('click', function(){
+  q.value = ''; filter(''); clearChips();
+  seatEls.forEach(function(s){ s.setAttribute('aria-pressed','false'); });
+  detail.innerHTML = '<h2>좌석 정보</h2><p class="none">좌석을 누르면 어느 팀 자리인지, 몇 명인지 보여줍니다.</p>';
+});
+
+document.getElementById('t-seat').textContent = seatEls.filter(function(s){ return s.dataset.team; }).length;
+document.getElementById('t-empty').textContent = seatEls.filter(function(s){ return !s.dataset.team; }).length;
+document.getElementById('t-kid').textContent = KID_SEATS.length;
+
+</script>
+</body>
+</html>
