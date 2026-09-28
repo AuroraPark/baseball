@@ -3,17 +3,68 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#12233F">
-<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#12233F" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0C1320" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
 <title>6회말 단관 이벤트 (예시) · 308블럭</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#EEF1F7;--surface:#fff;--line:#D7DEEB;
     --navy:#12233F;--navy-2:#1D3560;--text:#16203A;--muted:#66768F;--red:#CE0E2D;--amber:#FFC53D;
-    --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --font:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      --ink-strong:#12233F;
+    --hero-bg:#12233F;
+    --hero-text:#FFFFFF;
+    --hero-sub:#93A5C4;
+    --btn-bg:#12233F;
+    --focus:#1D3560;
+    --soft:#F2F4F9;
+    --soft-fg:#9AA6BC;
+    --dash:#C3CCDD;
+    --tint-mint:#E4F7F4;
+    --tint-red:#FDECEF;
+    --tint-red-bd:#F0C2CB;
+    --tint-red-fg:#96707A;
+    --note-bg:#FFF8E6;
+    --note-bd:#EBD8A8;
+    --note-fg:#5C4A1E;
+    --note-h:#8A6100;
+    --placeholder:#98A5BC;
+    --ok:#0B6E63;
+}
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0C1320;
+      --surface:#151D2B;
+      --line:#293448;
+      --text:#E6EBF5;
+      --muted:#93A2BC;
+      --red:#FF6B82;
+      --ink-strong:#DCE4F2;
+      --hero-bg:#131B2A;
+      --hero-text:#F2F6FF;
+      --hero-sub:#8FA0BE;
+      --btn-bg:#2F5AA8;
+      --focus:#7FA8FF;
+      --soft:#1B2436;
+      --soft-fg:#7C8BA6;
+      --dash:#3A465E;
+      --tint-mint:#0E2B27;
+      --tint-red:#2C1720;
+      --tint-red-bd:#4A2733;
+      --tint-red-fg:#C9909C;
+      --note-bg:#231D10;
+      --note-bd:#473C1C;
+      --note-fg:#E2D5AD;
+      --note-h:#F0C96A;
+      --placeholder:#7C8BA6;
+      --ok:#5FD6C6;
+    }
   }
+
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html{background:var(--bg);-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
@@ -21,12 +72,12 @@
     padding:0 0 calc(40px + env(safe-area-inset-bottom));font-size:16px;line-height:1.5}
   .wrap{max-width:600px;margin:0 auto;padding:0 16px}
 
-  .hero{background:var(--navy);color:#fff;padding:24px 0 20px;border-radius:0 0 20px 20px;margin-bottom:14px}
+  .hero{background:var(--hero-bg);color:var(--hero-text);padding:24px 0 20px;border-radius:0 0 20px 20px;margin-bottom:14px}
   .kicker{margin:0 0 6px;font-size:14px;font-weight:700;color:var(--amber)}
   h1{margin:0;font-size:clamp(26px,7vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.05}
   .hero p{margin:12px 0 0;color:#93A5C4;font-size:13.5px;line-height:1.6}
 
-  .banner{background:#FFF8E6;border:1px solid #EBD8A8;color:#7A5600;border-radius:13px;
+  .banner{background:var(--note-bg);border:1px solid var(--note-bd);color:var(--note-fg);border-radius:13px;
     padding:13px 15px;font-size:14px;font-weight:600;margin-bottom:12px;display:none}
 
   /* ── 구장 ── */
@@ -64,14 +115,14 @@
     border-radius:0 0 18px 18px;padding:20px 18px;text-align:center;margin-top:-18px;padding-top:32px}
   .label{color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.04em;margin:0}
   .num{font-size:clamp(66px,21vw,104px);font-weight:800;line-height:1;letter-spacing:-.05em;
-    color:var(--navy);margin:6px 0 2px;font-variant-numeric:tabular-nums}
-  .num.rolling{color:#9AA9C4}
+    color:var(--ink-strong);margin:6px 0 2px;font-variant-numeric:tabular-nums}
+  .num.rolling{color:var(--muted)}
   .num.win{color:var(--red)}
   .team{font-size:19px;font-weight:700;min-height:29px}
-  .team.muted{color:#B4BFD3;font-weight:600}
+  .team.muted{color:var(--muted);font-weight:600}
 
-  .btn{width:100%;padding:17px;border-radius:13px;border:1px solid var(--navy);
-    background:var(--navy);color:#fff;font:inherit;font-size:17px;font-weight:800;cursor:pointer;margin-top:16px}
+  .btn{width:100%;padding:17px;border-radius:13px;border:1px solid var(--btn-bg);
+    background:var(--btn-bg);color:#fff;font:inherit;font-size:17px;font-weight:800;cursor:pointer;margin-top:16px}
   .btn:disabled{opacity:.4;cursor:default}
   .btn.ghost{background:var(--surface);color:var(--text);border-color:var(--line);
     font-size:14.5px;font-weight:600;padding:12px;margin-top:8px}
@@ -80,7 +131,7 @@
 
   .opt{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:14px;
     color:var(--muted);font-size:14px}
-  .opt input{width:20px;height:20px;accent-color:var(--navy)}
+  .opt input{width:20px;height:20px;accent-color:var(--btn-bg)}
   .pool{color:var(--muted);font-size:13px;margin:10px 0 0}
 
   .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;
@@ -88,10 +139,10 @@
   .card h2{margin:0 0 10px;font-size:14.5px;font-weight:700;color:var(--muted)}
   .winners{display:flex;flex-wrap:wrap;gap:7px}
   .w{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;
-    background:#FDECEF;border:1px solid #F0C2CB;color:var(--red);font-size:13.5px;font-weight:700}
-  .w em{font-style:normal;color:#96707A;font-weight:600}
-  .empty{color:#9AA6BC;font-size:14px;margin:0}
-  .done{margin:10px 0 0;color:#0B6E63;font-size:13.5px;font-weight:600;min-height:19px;text-align:center}
+    background:var(--tint-red);border:1px solid var(--tint-red-bd);color:var(--red);font-size:13.5px;font-weight:700}
+  .w em{font-style:normal;color:var(--tint-red-fg);font-weight:600}
+  .empty{color:var(--muted);font-size:14px;margin:0}
+  .done{margin:10px 0 0;color:var(--ok);font-size:13.5px;font-weight:600;min-height:19px;text-align:center}
   footer{margin-top:18px;color:var(--muted);font-size:12.5px;line-height:1.7}
 </style>
 </head>
